@@ -1,14 +1,21 @@
-# Use Java 21 runtime
-FROM eclipse-temurin:21-jre
+# ---------- Build Stage ----------
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy the built JAR into the container
-COPY target/interest-connect-0.0.1-SNAPSHOT.jar app.jar
+COPY pom.xml .
 
-# Expose application port
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+# ---------- Runtime Stage ----------
+FROM eclipse-temurin:21-jre
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar app.jar
+
 EXPOSE 8080
 
-# Start the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
