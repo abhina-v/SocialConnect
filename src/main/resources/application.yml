@@ -10,7 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
 
 jwt:
   secret: ${JWT_SECRET:1234567890123456789012345678901234567890123456789012345678901234}
@@ -19,3 +19,17 @@ jwt:
 logging:
   level:
     org.springframework.security: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+  endpoint:
+    health:
+      show-details: never
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
