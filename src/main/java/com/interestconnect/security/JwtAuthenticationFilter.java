@@ -31,11 +31,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        System.out.println("\n========== JWT FILTER ==========");
-        System.out.println("Request URI: " + request.getRequestURI());
+        
 
         String authHeader = request.getHeader("Authorization");
-        System.out.println("Authorization Header: " + authHeader);
+       
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             System.out.println("❌ No Bearer token found.");
@@ -44,10 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String jwt = authHeader.substring(7);
-        System.out.println("JWT Token: " + jwt);
+        
 
         boolean valid = jwtService.isTokenValid(jwt);
-        System.out.println("Token Valid: " + valid);
+        
 
         if (!valid) {
             System.out.println("❌ Invalid JWT.");
@@ -56,7 +55,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String email = jwtService.extractEmail(jwt);
-        System.out.println("Extracted Email: " + email);
+      
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -65,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails =
                     userDetailsService.loadUserByUsername(email);
 
-            System.out.println("User Loaded: " + userDetails.getUsername());
+            
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -83,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Authentication already exists or email is null.");
         }
 
-        System.out.println("========== END JWT FILTER ==========\n");
+       
 
         filterChain.doFilter(request, response);
     }
