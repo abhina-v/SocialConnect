@@ -7,6 +7,11 @@ spring:
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
 
+  
+  data:
+    redis:
+      url: ${REDIS_URL}
+
   jpa:
     hibernate:
       ddl-auto: update
