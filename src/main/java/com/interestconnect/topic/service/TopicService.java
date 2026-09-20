@@ -12,6 +12,8 @@ import com.interestconnect.topic.entity.TopicStatus;
 import com.interestconnect.topic.repository.TopicRepository;
 import com.interestconnect.user.entity.User;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ public class TopicService {
         this.topicRepository = topicRepository;
         this.authService = authService;
     }
-
+    @CacheEvict(value = "topics", key = "'all'")
     public CreateTopicResponse createTopic(CreateTopicRequest request) {
 
         User currentUser = authService.getCurrentUser();
@@ -50,7 +52,7 @@ public class TopicService {
                 savedTopic.getCreatedBy().getName()
         );
     }
-
+    @Cacheable(value = "topics", key = "'all'")
     public List<TopicResponse> getAllTopics() {
 
         List<Topic> topics = topicRepository.findByStatus(TopicStatus.LIVE);
@@ -98,7 +100,7 @@ public class TopicService {
                 ))
                 .toList();
     }
-
+    @CacheEvict(value = "topics", key = "'all'")
     public TopicResponse updateTopic(Long id, UpdateTopicRequest request) {
 
         Topic topic = topicRepository.findById(id)
@@ -127,7 +129,7 @@ public class TopicService {
                 updatedTopic.getCreatedBy().getName()
         );
     }
-
+    @CacheEvict(value = "topics", key = "'all'")
     public TopicResponse closeTopic(Long id) {
 
         Topic topic = topicRepository.findById(id)
@@ -154,7 +156,7 @@ public class TopicService {
                 updatedTopic.getCreatedBy().getName()
         );
     }
-
+    @CacheEvict(value = "topics", key = "'all'")
     public void deleteTopic(Long id) {
 
         Topic topic = topicRepository.findById(id)
